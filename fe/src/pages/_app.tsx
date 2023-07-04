@@ -1,4 +1,4 @@
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import type { AppProps } from 'next/app';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -11,7 +11,14 @@ import dayjs from 'dayjs';
 export default function App(props: AppProps) {
 	const { Component, pageProps } = props;
 
-	const queryClient = new QueryClient();
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				refetchOnWindowFocus: false,
+				retry: 3,
+			}
+		}
+	});
 
 	dayjs.extend(utc);
 	dayjs.extend(timezone);

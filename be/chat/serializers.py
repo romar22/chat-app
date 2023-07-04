@@ -7,13 +7,29 @@ from .models import (
     Message,
 )
 from users.serializers import (
-    UserSerializer
+    UserSerializer,
 )
 
 
 class FriendSerializer(ModelSerializer):
-    from_user = UserSerializer()
+    # user = UserSerializer()
+    friends = UserSerializer(many=True)
 
     class Meta:
         model = Friend
-        fields = '__all__'
+        fields = ('id', 'friends', )
+
+
+class ConversationSerializer(ModelSerializer):
+    participants = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Conversation
+        fields = ('id', 'participants', )
+
+
+class MessageSerializer(ModelSerializer):
+    sender = UserSerializer()
+    class Meta:
+        model = Message
+        fields = ('id', 'conversation', 'sender', 'text',)

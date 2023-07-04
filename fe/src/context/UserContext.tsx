@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { Token } from "@/shared/model/User";
 import { setAxiosAuthInstanceHeader } from "@/shared/utils/axiosAuthInstance";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getUser } from "@/shared/api/users/user";
+import { getUser } from "@/shared/api/user";
 
 const UserContext = createContext<any>({});
 
@@ -21,9 +21,14 @@ const UserContextProvider = (props: any) => {
         window.location.href = '/';
     }
 
+    function isMe(id: number){
+        return user?.id === id;
+    }
+
     const userContextValue = {
         user,
         logout,
+        isMe,
     }
 
     return <UserContext.Provider 

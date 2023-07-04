@@ -8,35 +8,41 @@ from users.models import (
 
 
 class FriendRequest(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_request_sent')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_request_received')
+    from_user           = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_request_sent')
+    to_user             = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_request_received')
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_created        = models.DateTimeField(auto_now_add=True)
+    date_updated        = models.DateTimeField(auto_now=True)
+
+
 
 class Friend(models.Model):
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friends')
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user                = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
+    friends             = models.ManyToManyField(User, blank=True, related_name='friends')
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_created        = models.DateTimeField(auto_now_add=True)
+    date_updated        = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.user.username
+    
+    class Meta:
+        verbose_name_plural = 'Friend'
+
 
 
 class Conversation(models.Model):
-    friend = models.ForeignKey(Friend, on_delete=models.CASCADE, related_name='conversations')
+    participants        = models.ManyToManyField(User, related_name='conversations')
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    date_created        = models.DateTimeField(auto_now_add=True)
+    date_updated        = models.DateTimeField(auto_now=True)
+
+
 
 class Message(models.Model):
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
-    text = models.TextField()
+    conversation        = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    sender              = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
+    text                = models.TextField()
 
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-
-@receiver(post_save, sender=Friend)
-def create_friend(sender, instance, created, **kwargs):
-    if created:
-        Conversation.objects.create(friend=instance)
+    date_created        = models.DateTimeField(auto_now_add=True)
+    date_updated        = models.DateTimeField(auto_now=True)

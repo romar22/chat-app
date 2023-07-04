@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { TOKEN } from '../config';
 import jwt_decode from 'jwt-decode';
 import dayjs from 'dayjs';
-import { getAccessToken } from '../api/users/user';
+import { getAccessToken } from '../api/user';
 import { forceLogout } from './helper';
 
 const baseURL = process.env.apiURL;

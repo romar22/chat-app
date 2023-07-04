@@ -7,12 +7,14 @@ class FriendRequestAdmin(admin.ModelAdmin):
 
 @admin.register(Friend)
 class FriendAdmin(admin.ModelAdmin):
-    list_display = ('from_user', 'to_user', 'date_created', 'date_updated')
+    # list_display = ('from_user', 'to_user', 'date_created', 'date_updated')
+    pass
 
 
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
-    list_display = ('friend', 'date_created', 'date_updated')
+    # list_display = ('friend', 'date_created', 'date_updated')
+    pass
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):

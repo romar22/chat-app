@@ -6,7 +6,7 @@ import { useUser } from "@/context/UserContext";
 import { useState } from "react"
 import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
-import { getToken } from '@/shared/api/users/user';
+import { getToken } from '@/shared/api/user';
 import { useMutation } from '@tanstack/react-query';
 import { Credentials, Token } from '@/shared/model/User';
 import { setAxiosAuthInstanceHeader } from '@/shared/utils/axiosAuthInstance';
@@ -48,10 +48,14 @@ export default function Login(){
                 router.push('/u');
             },
             onError: (error) => {
-                setError("password", {
-                    type: "manual",
-                    message: error.response?.data?.non_field_errors[0]
-                });
+                if(error.code === 'ERR_NETWORK'){
+                    setError("password", { type: "manual", message: 'Server Down' });
+                }else{
+                    setError("password", {
+                        type: "manual",
+                        message: error.response?.data?.non_field_errors[0]
+                    });
+                }
             }
         });
     }
