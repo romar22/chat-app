@@ -12,3 +12,10 @@ export const forceLogout = () => {
     Cookies.remove(TOKEN.REFRESH);
     window.location.href = '/';
 }
+
+
+export const queryURL = (url: string, query: {}) => {
+    const params = new URLSearchParams(query);
+    return `${url}?${params.toString()}`;
+}
+

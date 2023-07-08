@@ -11,7 +11,9 @@ import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
-import chat.routing
+from .routing import websocket_urlpatterns
+from channels.security.websocket import AllowedHostsOriginValidator
+from middleware.channels import QueryAuthMiddleware
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'be.settings')
 
@@ -19,9 +21,9 @@ django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
-    "websocket": AuthMiddlewareStack(
+    "websocket": QueryAuthMiddleware(
         URLRouter(
-            chat.routing.websocket_urlpatterns,
+            websocket_urlpatterns,
         )
     )
 })

@@ -45,7 +45,7 @@ export default function Login(){
                 setAxiosAuthInstanceHeader(resp.data.access);
                 Cookies.set(TOKEN.ACCESS, resp.data.access);
                 Cookies.set(TOKEN.REFRESH, resp.data.refresh);
-                router.push('/u');
+                router.push('/u/u/');
             },
             onError: (error) => {
                 if(error.code === 'ERR_NETWORK'){
@@ -65,10 +65,10 @@ export default function Login(){
             {isLoading? 'loading...': ''}
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <h1>Login</h1>
-                <input {...register("username")} value="r" />
+                <input {...register("username")} />
                 <div>{errors.username?.message}</div>
                 <br/>
-                <input {...register("password")} autoComplete="true" value="1" type="password" />
+                <input {...register("password")} autoComplete="true" type="password" />
                 <div>{errors.password?.message}</div>
                 <button type="submit">Login</button>
             </form>

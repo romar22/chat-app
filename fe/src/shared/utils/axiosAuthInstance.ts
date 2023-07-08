@@ -23,7 +23,7 @@ axiosAuthInstance.interceptors.request.use(async (req) => {
 
     const accessExpiry = jwt_decode<{exp: number}>(Cookies.get(TOKEN.ACCESS) as any).exp;
 
-    const isAcessExpired = accessExpiry - currentDateTime < 10;
+    const isAcessExpired = accessExpiry - currentDateTime < 15;
 
     if(isAcessExpired){
         try {

@@ -13,8 +13,7 @@ class FriendAdmin(admin.ModelAdmin):
 
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
-    # list_display = ('friend', 'date_created', 'date_updated')
-    pass
+    list_display = ('id', 'date_created', 'date_updated')
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):

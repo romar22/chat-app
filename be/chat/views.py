@@ -20,7 +20,6 @@ class ConversationView(ModelViewSet):
     serializer_class = ConversationSerializer
 
     def get_queryset(self):
-        print(self.request.user)
         return self.serializer_class.Meta.model.objects.filter(participants=self.request.user)   
     
 

@@ -13,6 +13,7 @@ const UserContextProvider = (props: any) => {
 
     const { data: user } = useQuery<any>(['me'], getUser, {
         enabled: !!Cookies.get(TOKEN.ACCESS),
+        staleTime: Infinity,
     });
 
     function logout(){
@@ -30,7 +31,7 @@ const UserContextProvider = (props: any) => {
         logout,
         isMe,
     }
-
+    
     return <UserContext.Provider 
                 value={userContextValue} 
                 {...props} 

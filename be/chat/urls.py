@@ -19,6 +19,7 @@ urlpatterns = [
             path('messages/', include([
                 path('', MessageView.as_view({
                     'get': 'list',
+                    'post': 'create',
                 })),
             ])),
         ])),

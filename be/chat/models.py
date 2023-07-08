@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 from users.models import (
     User
@@ -37,7 +38,8 @@ class Conversation(models.Model):
     date_created        = models.DateTimeField(auto_now_add=True)
     date_updated        = models.DateTimeField(auto_now=True)
 
-
+    class Meta:
+        ordering = ['-date_updated']
 
 class Message(models.Model):
     conversation        = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
@@ -46,3 +48,9 @@ class Message(models.Model):
 
     date_created        = models.DateTimeField(auto_now_add=True)
     date_updated        = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs) :
+        conversation = Conversation.objects.filter(pk=self.conversation.pk)
+        conversation.update(date_updated=timezone.now())
+
+        return super().save(*args, **kwargs)
