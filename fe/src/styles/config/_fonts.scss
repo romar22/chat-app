@@ -1,0 +1,10 @@
+
+$noto-san-font: (
+    (300, "NotoSans-Regular"),
+    (400, "NotoSans-Regular"),
+    (500, "NotoSans-Medium"),
+    (600, "NotoSans-SemiBold"),
+    (700, "NotoSans-Bold"),
+    (800, "NotoSans-ExtraBold"),
+);
+@include set-font-face($noto-san-font, "NotoSans", "/fonts/NotoSans");

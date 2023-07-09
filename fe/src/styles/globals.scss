@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'helper/base';
+@import 'config/base';
+
+body{
+    font-family: $noto-san-font, 'Segoe UI', sans-serif;
+}
