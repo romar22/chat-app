@@ -8,6 +8,10 @@ from .serializers import (
     MessageSerializer,
 )
 
+from .paginations import (
+    MessagesPagination
+)
+
 class FriendView(ModelViewSet):
     serializer_class = FriendSerializer
 
@@ -25,8 +29,13 @@ class ConversationView(ModelViewSet):
 
 class MessageView(ModelViewSet):
     serializer_class = MessageSerializer
+    pagination_class = MessagesPagination
+
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
 
     def list(self, request, *args, **kwargs):
-        queryset = self.serializer_class.Meta.model.objects.filter(**kwargs)
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        qs = self.serializer_class.Meta.model.objects.filter(**kwargs)
+        paginated_qs = self.paginate_queryset(qs)
+        serializer = self.serializer_class(paginated_qs, many=True)
+        return self.get_paginated_response(serializer.data)

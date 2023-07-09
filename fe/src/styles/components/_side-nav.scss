@@ -1,0 +1,25 @@
+
+
+.side-nav{
+    @apply w-[5rem] bg-black;
+
+    .side-nav__link{
+        @apply flex flex-col items-center py-2;
+
+        .link{
+            @apply font-mono text-sm text-center;
+        }
+
+        &:hover, &.active{
+            @apply bg-gray-900;
+
+            .link {
+                @apply text-indigo-400;
+            }
+
+            .icon {
+                @apply text-indigo-400;
+            }
+        }
+    }
+}
