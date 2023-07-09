@@ -1,10 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
+@import 'shadcn';
 @import 'helper/base';
 @import 'config/base';
 
 body{
     font-family: $noto-san-font, 'Segoe UI', sans-serif;
+    letter-spacing: -0.48px;
 }
