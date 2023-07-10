@@ -8,6 +8,9 @@ import UserLoader from "@/layouts/UserLoader";
 import { useForm } from "react-hook-form";
 import { WSocket } from "@/shared/utils/webSocket";
 import MainLayout from "@/layouts/MainLayout";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Conversations() {
     const router = useRouter();
@@ -29,10 +32,10 @@ function Conversations() {
             enabled: !!conversationId,
             staleTime: Infinity,
             onSuccess: (data) => {
-                if(data?.pages.length > 1){
-                    const last = data.pages.pop();
-                    data.pages.unshift(last);
-                }
+                // if(data?.pages.length > 1){
+                //     const last = data.pages.pop();
+                //     data.pages.unshift(last);
+                // }
             },
             getNextPageParam: (lastPage, pages) => {
                 if(pages.length < (lastPage.count/pages.length)){
@@ -77,21 +80,12 @@ function Conversations() {
 
     }, []);
 
-    const messageBox = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if(!messageBox.current) return;
 
-        messageBox.current.onscroll = (e) => {
-            if(messageBox.current?.scrollTop === 0){
-                if(hasNextPage){
-                    fetchNextPage();
-                    messageBox.current.scrollTo({ top: 500 });
-                }
-            }
+    const messageForm = useForm({
+        defaultValues: {
+            message: "",
         }
-    }, [hasNextPage]);
-
-    const { register, handleSubmit } = useForm();
+    });
 
     function userClicked(id: number){
         router.push(`/u/${id}`);
@@ -110,7 +104,7 @@ function Conversations() {
     const messageEndRef = useRef<HTMLDivElement>(null);
 
     function scrollToBottom(){
-        messageEndRef.current?.scrollIntoView({ block: "end", inline: "nearest" });
+        messageEndRef.current?.scrollTo({ top: Infinity });
     }
 
     useEffect(() => {
@@ -119,6 +113,8 @@ function Conversations() {
             scrollToBottom();
         }
     }, [messages])
+
+    console.log(messages)
 
     return (
         <MainLayout>
@@ -156,44 +152,60 @@ function Conversations() {
                 </aside>
 
                 <section className="h-full flex-grow">
-                    <form 
-                        onSubmit={handleSubmit(onMessageSubmit)} 
-                        noValidate
-                        className="flex flex-col h-full px-4 pb-8"
-                    >
+                    <div className="flex flex-col h-full px-4 pb-4">
                         <div 
-                            className="relative overflow-y-scroll h-full"
-                            ref={messageBox}
+                            className="relative overflow-y-scroll h-full flex flex-col-reverse"
+                            id="scrollableDiv"
                         >
-                            <div className="flex flex-col absolute min-h-full w-full">
-                                <div className="flex-auto"></div>
-                                <div className="flex-initial">
-                                    {messages?.pages.map((group: any, i) => (
-                                        <Fragment key={i}>
-                                            {[...group.results].reverse().map((message: any) => (
-                                                <div 
-                                                    key={message.id} 
-                                                    className={`w-100 h-[200px] flex flex-col gap-4 ${isMe(message.sender.id) ? 'items-end' : 'items-start'}`}
-                                                >
-                                                    <div>{message.sender.name}</div>
-                                                    <div>{message.text}</div>
-                                                </div>
-                                            ))}
-                                        </Fragment>
-                                    ))}
-                                    <div className="h-0" ref={messageEndRef}></div>
-                                </div>
-                            </div>
+                            <InfiniteScroll
+                                dataLength={(messages?.pages.length ?? 0) * 3}
+                                next={fetchNextPage}
+                                hasMore={hasNextPage ?? false}
+                                loader={<h4>Loading...</h4>}
+                                inverse={true}
+                                className="flex flex-col-reverse flex-grow-1"
+                                scrollableTarget="scrollableDiv"
+                            >
+                                {messages?.pages.map((group: any, i) => (
+                                    <Fragment key={i}>
+                                        {group.results.map((message: any) => (
+                                            <div 
+                                                key={message.id} 
+                                                className={`w-100 h-[500px] flex flex-col gap-4 ${isMe(message.sender.id) ? 'items-end' : 'items-start'}`}
+                                            >
+                                                <div>{message.sender.name}</div>
+                                                <div>{message.text}</div>
+                                            </div>
+                                        ))}
+                                    </Fragment>
+                                ))}
+                            </InfiniteScroll>
+                            <div className="h-0" ref={messageEndRef}></div>
                         </div>
-                        <div className="w-full">
-                            <input 
-                                {...register("message")}
-                                type="text" 
-                                placeholder="Message"
-                                className="w-full p-4 text-base text-black focus:outline-none border-2 border-gray-300 rounded-[30px]"
-                            />
-                        </div>
-                    </form>
+                        <Form {...messageForm}>
+                            <form
+                                className="w-full"
+                                onSubmit={messageForm.handleSubmit(onMessageSubmit)} 
+                                noValidate
+                            >
+                                <FormField
+                                    control={messageForm.control}
+                                    name="message"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input 
+                                                    className="h-16 px-7 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border focus:border-gray-600"
+                                                    autoComplete="off"
+                                                    placeholder="Your message" 
+                                                    {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </form>
+                        </Form>
+                    </div>
                 </section>
             </main>
         </MainLayout>
