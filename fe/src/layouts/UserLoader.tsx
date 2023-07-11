@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import { useUser } from "@/context/UserContext";
 import { Fragment, ReactNode } from "react";
 
@@ -12,8 +13,9 @@ export default function UserLoader({ children }: UserLoaderProps) {
         <Fragment>
             {user ? 
                 children : 
-                <div>Loading...</div>
+                <Spinner />
             }
+            
         </Fragment>
     );
 }

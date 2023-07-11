@@ -1,13 +1,13 @@
 
 
 .side-nav{
-    @apply w-[5rem] bg-black;
+    @apply min-w-[5rem] max-w-[5rem] bg-black flex flex-col justify-between;
 
     .side-nav__link{
-        @apply flex flex-col items-center py-2;
+        @apply flex flex-col items-center py-2 transition-colors duration-300;
 
         .link{
-            @apply font-mono text-sm text-center;
+            @apply font-mono text-sm text-center transition-colors duration-300;
         }
 
         &:hover, &.active{

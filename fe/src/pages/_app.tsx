@@ -8,17 +8,17 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import dayjs from 'dayjs';
 
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			retry: 3,
+		}
+	}
+});
+
 export default function App(props: AppProps) {
 	const { Component, pageProps } = props;
-
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				refetchOnWindowFocus: false,
-				retry: 3,
-			}
-		}
-	});
 
 	dayjs.extend(utc);
 	dayjs.extend(timezone);

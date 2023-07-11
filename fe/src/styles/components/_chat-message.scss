@@ -1,0 +1,26 @@
+
+.my-message, .others-message{
+    .message{
+        @apply p-4 rounded-xl text-sm text-gray-100;
+    }
+}
+
+.my-message{
+    @apply flex flex-col gap-4 items-end;
+
+    .message{
+        @apply bg-gray-800;
+    }
+}
+
+.others-message{
+    @apply flex gap-5 w-11/12;
+
+    .avatar{
+        @apply w-10 h-10 rounded-full;
+    }
+
+    .message{
+        @apply bg-gray-700;
+    }
+}
